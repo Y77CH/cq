@@ -3,9 +3,19 @@
 #include <regex>
 #include <stdexcept>
 
-requests::url::url() : port(0) {}
+struct requests::url::impl
+{
+    url::schemes scheme = url::schemes::none;
+    std::string  host;
+    uint16_t     port   = 0;
+    std::string  path;
+    std::string  query;
+    std::string  fragment;
+};
 
-requests::url::url(std::string_view url)
+requests::url::url() : pimpl(new requests::url::impl()) {}
+
+requests::url::url(std::string_view url) : pimpl(new requests::url::impl())
 {
     // BNF for http/https (from RFC1738):
     //
@@ -64,12 +74,14 @@ requests::url::url(std::string_view url)
         throw std::logic_error("Not a valid URL!");
     }
     // Get scheme without ://
-    scheme = match.str(1);
+    std::string scheme_str = match.str(1);
     // Convert scheme to lowercase
     std::transform(
-        scheme.begin(), scheme.end(),
-        scheme.begin(), [](auto &&c){ return std::tolower(c); }
+        scheme_str.begin(), scheme_str.end(),
+        scheme_str.begin(), [](auto &&c){ return std::tolower(c); }
     );
+    // Get enum scheme
+    pimpl->scheme = (scheme_str == "http" ? schemes::http : schemes::https);
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -92,11 +104,11 @@ requests::url::url(std::string_view url)
         throw std::logic_error("Not a valid URL!");
     }
     // Get host
-    host = match.str();
+    pimpl->host = match.str();
     // Convert host to lowercase
     std::transform(
-        host.begin(), host.end(),
-        host.begin(), [](auto &&c){ return std::tolower(c); }
+        pimpl->host.begin(), pimpl->host.end(),
+        pimpl->host.begin(), [](auto &&c){ return std::tolower(c); }
     );
     // Remove found
     url.remove_prefix(match.str().size());
@@ -112,19 +124,19 @@ requests::url::url(std::string_view url)
         constexpr uint16_t http_default_port = 80;
         constexpr uint16_t https_default_port = 443;
         // Change port to default if not specified
-        port = (scheme == "http" ? http_default_port : https_default_port);
+        pimpl->port = (pimpl->scheme == schemes::http ? http_default_port : https_default_port);
     }
     else
     {
         // Get specified port
-        port = std::stoul(match.str(2));
+        pimpl->port = std::stoul(match.str(2));
     }
     // Remove found
     url.remove_prefix(match.str().size());
 
 
     /* Regex helpers */
-    const std::string escape {"(%[0-9a-f]{2})"};
+    const std::string escape   {"(%[0-9a-f]{2})"};
     const std::string hsegment {"(([-$_.+;:@&=!*'(),a-z0-9]|" + escape + ")*)"};
 
     // Starts with optional path
@@ -136,9 +148,9 @@ requests::url::url(std::string_view url)
     // Find path
     std::regex_search(url.data(), match, rpath);
     // Get specified path or ""
-    path = match.str();
+    pimpl->path = match.str();
     // Change path if empty
-    if (path.empty()) { path = "/"; }
+    if (pimpl->path.empty()) { pimpl->path = "/"; }
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -149,7 +161,7 @@ requests::url::url(std::string_view url)
     // Find query
     std::regex_search(url.data(), match, rquery);
     // Get specified query or ""
-    query = match.str(1);
+    pimpl->query = match.str(1);
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -164,7 +176,42 @@ requests::url::url(std::string_view url)
     // Find query
     std::regex_search(url.data(), match, rfragment);
     // Get specified query or ""
-    fragment = match.str(1);
+    pimpl->fragment = match.str(1);
     // Remove found
     url.remove_prefix(match.str().size());
+}
+
+requests::url::~url() {}
+
+requests::url::schemes requests::url::scheme() const noexcept { return pimpl->scheme; }
+
+std::string requests::url::host()     const noexcept { return pimpl->host; }
+uint16_t    requests::url::port()     const noexcept { return pimpl->port; }
+std::string requests::url::path()     const noexcept { return pimpl->path; }
+std::string requests::url::query()    const noexcept { return pimpl->query; }
+std::string requests::url::fragment() const noexcept { return pimpl->fragment; }
+
+std::string requests::url::str() const noexcept
+{
+    std::string res;
+
+    switch (pimpl->scheme)
+    {
+    case schemes::none:  return {};
+    case schemes::http:  res += "http"; break;
+    case schemes::https: res += "https"; break;
+    }
+    res += "://";
+
+    res += pimpl->host;
+
+    res += ":" + std::to_string(pimpl->port);
+
+    res += pimpl->path;
+
+    if (!pimpl->query.empty())    { res += "?" + pimpl->query; }
+
+    if (!pimpl->fragment.empty()) { res += "#" + pimpl->fragment; }
+
+    return res;
 }
