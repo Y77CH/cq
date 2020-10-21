@@ -7,12 +7,14 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(
     requests_headers
         ${PROJECT_SOURCE_DIR}/include/requests/url.hpp
+        ${PROJECT_SOURCE_DIR}/include/requests/method.hpp
 )
 
 # path to sources
 set(
     requests_sources
         url.cpp
+        method.cpp
 )
 
 add_library(requests ${requests_sources} ${requests_headers})

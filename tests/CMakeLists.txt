@@ -46,3 +46,4 @@ macro(add_requests_test _TEST_NAME)
 endmacro()
 
 add_requests_test(url)
+add_requests_test(method)
