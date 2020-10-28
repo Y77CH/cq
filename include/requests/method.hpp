@@ -1,7 +1,6 @@
 #ifndef REQUESTS_METHOD_HPP
 #define REQUESTS_METHOD_HPP
 
-#include <memory>
 #include <string>
 #include <string_view>
 
@@ -25,7 +24,7 @@ public:
 
 
     // Construct method from enum
-    explicit method(const method::enum_t &);
+    explicit method(const method::enum_t &e) : m_e(e) {}
 
     /**
      * @brief Create method from method string.
@@ -35,19 +34,14 @@ public:
     explicit method(std::string_view);
 
 
-    // Destructor for pimpl
-    ~method();
-
-
     // Get method enum entry
-    [[nodiscard]] enum_t as_enum() const noexcept;
+    [[nodiscard]] enum_t as_enum() const noexcept { return m_e; }
 
     // Get method string representation (all caps)
     [[nodiscard]] std::string as_string() const noexcept;
 
 private:
-    struct impl;
-    std::unique_ptr<impl> pimpl;
+    method::enum_t m_e;
 };
 
 } // namespace requests
