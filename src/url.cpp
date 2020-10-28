@@ -170,7 +170,7 @@ requests::url::url(std::string_view url)
     url.remove_prefix(match.str().size());
 }
 
-std::string requests::url::str() const noexcept
+std::string requests::url::as_string() const noexcept
 {
     std::string res;
 

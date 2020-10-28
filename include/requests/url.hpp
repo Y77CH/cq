@@ -31,7 +31,7 @@ public:
     [[nodiscard]] std::string fragment() const noexcept { return m_fragment; }
 
     // Return URL string
-    [[nodiscard]] std::string str() const noexcept;
+    [[nodiscard]] std::string as_string() const noexcept;
 
 private:
     url::scheme_t m_scheme;

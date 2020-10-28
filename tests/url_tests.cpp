@@ -13,7 +13,7 @@ TEST( HTTP, Basic )
     EXPECT_EQ( url.query(), "" );
     EXPECT_EQ( url.fragment(), "" );
 
-    EXPECT_EQ( url.str(), "http://www.example.com:80/");
+    EXPECT_EQ( url.as_string(), "http://www.example.com:80/");
 }
 
 TEST( HTTP, Port )
@@ -27,7 +27,7 @@ TEST( HTTP, Port )
     EXPECT_EQ( url.query(), "" );
     EXPECT_EQ( url.fragment(), "" );
 
-    EXPECT_EQ( url.str(), "http://www.example.com:8080/");
+    EXPECT_EQ( url.as_string(), "http://www.example.com:8080/");
 }
 
 TEST( HTTPS, Basic )
@@ -41,7 +41,7 @@ TEST( HTTPS, Basic )
     EXPECT_EQ( url.query(), "" );
     EXPECT_EQ( url.fragment(), "" );
 
-    EXPECT_EQ( url.str(), "https://www.example.com:443/");
+    EXPECT_EQ( url.as_string(), "https://www.example.com:443/");
 }
 
 TEST( HTTPS, Path )
@@ -55,7 +55,7 @@ TEST( HTTPS, Path )
     EXPECT_EQ( url.query(), "" );
     EXPECT_EQ( url.fragment(), "" );
 
-    EXPECT_EQ( url.str(), "https://www.example.com:443/user/0/data.dat");
+    EXPECT_EQ( url.as_string(), "https://www.example.com:443/user/0/data.dat");
 }
 
 TEST( HTTPS, Query )
@@ -69,7 +69,7 @@ TEST( HTTPS, Query )
     EXPECT_EQ( url.query(), "sort=age&show=10" );
     EXPECT_EQ( url.fragment(), "" );
 
-    EXPECT_EQ( url.str(), "https://www.example.com:443/users?sort=age&show=10");
+    EXPECT_EQ( url.as_string(), "https://www.example.com:443/users?sort=age&show=10");
 }
 
 TEST( HTTPS, Fragment )
@@ -83,7 +83,7 @@ TEST( HTTPS, Fragment )
     EXPECT_EQ( url.query(), "" );
     EXPECT_EQ( url.fragment(), "header" );
 
-    EXPECT_EQ( url.str(), "https://www.example.com:443/page#header");
+    EXPECT_EQ( url.as_string(), "https://www.example.com:443/page#header");
 }
 
 TEST( HTTPS, Everything )
@@ -97,7 +97,7 @@ TEST( HTTPS, Everything )
     EXPECT_EQ( url.query(), "id=12345" );
     EXPECT_EQ( url.fragment(), "text" );
 
-    EXPECT_EQ( url.str(), "https://www.example.com:443/news?id=12345#text");
+    EXPECT_EQ( url.as_string(), "https://www.example.com:443/news?id=12345#text");
 }
 
 int main(int argc, char *argv[])
