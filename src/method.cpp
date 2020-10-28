@@ -1,15 +1,28 @@
 #include "requests/method.hpp"
 
-#include <unordered_map>
+#include <array>
+
+// Map method string with enum
+constexpr std::array<std::string_view, 7> arr = {
+    "DELETE",
+    "GET",
+    "HEAD",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT"
+};
+
 
 struct requests::method::impl
 {
-    method::verbs verb;
+    method::enum_t e;
 };
 
-requests::method::method(const verbs &v) : pimpl(new impl())
+
+requests::method::method(const method::enum_t &e) : pimpl(new impl())
 {
-    pimpl->verb = v;
+    pimpl->e = e;
 }
 
 requests::method::method(std::string_view v) : pimpl(new impl())
@@ -23,21 +36,10 @@ requests::method::method(std::string_view v) : pimpl(new impl())
         str.begin(), [](auto &&c){ return std::toupper(c); }
     );
 
-    // Map method string with verbs
-    static const std::unordered_map<std::string_view, method::verbs> map = {
-        { "DELETE",  verbs::DELETE  },
-        { "GET",     verbs::GET     },
-        { "HEAD",    verbs::HEAD    },
-        { "OPTIONS", verbs::OPTIONS },
-        { "PATCH",   verbs::PATCH   },
-        { "POST",    verbs::POST    },
-        { "PUT",     verbs::PUT     },
-    };
-
     // Check if one of supported methods
-    if (map.contains(str))
+    if (auto &&it = std::find(arr.begin(), arr.end(), str); it != arr.end())
     {
-        pimpl->verb = map.at(str);
+        pimpl->e = static_cast<method::enum_t>(std::distance(arr.begin(), it));
     }
     else
     {
@@ -47,22 +49,10 @@ requests::method::method(std::string_view v) : pimpl(new impl())
     }
 }
 
+
 requests::method::~method() {}
 
-requests::method::verbs requests::method::verb() const noexcept { return pimpl->verb; }
 
-std::string requests::method::str() const noexcept
-{
-    // Map verbs with method strings
-    static const std::unordered_map<method::verbs, std::string_view> map = {
-        { verbs::DELETE,  "DELETE"  },
-        { verbs::GET,     "GET"     },
-        { verbs::HEAD,    "HEAD"    },
-        { verbs::OPTIONS, "OPTIONS" },
-        { verbs::PATCH,   "PATCH"   },
-        { verbs::POST,    "POST"    },
-        { verbs::PUT,     "PUT"     }
-    };
+requests::method::enum_t requests::method::as_enum() const noexcept { return pimpl->e; }
 
-    return std::string{map.at(pimpl->verb)};
-}
+std::string requests::method::as_string() const noexcept { return std::string{arr.at(pimpl->e)}; }

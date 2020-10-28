@@ -11,8 +11,9 @@ namespace requests {
 class method
 {
 public:
-    // Possible method verbs
-    enum class verbs {
+
+    // Possible methods
+    enum enum_t : uint8_t {
         DELETE,
         GET,
         HEAD,
@@ -24,24 +25,25 @@ public:
 
 
     // Construct method from enum
-    explicit method(const verbs &);
+    explicit method(const method::enum_t &);
 
     /**
-     * @brief Create method from verb string.
+     * @brief Create method from method string.
      *
-     * @note: Throws exception if now found in enum
+     * @note: Throws exception if not found in enum
      */
     explicit method(std::string_view);
+
 
     // Destructor for pimpl
     ~method();
 
 
     // Get method enum entry
-    [[nodiscard]] verbs verb() const noexcept;
+    [[nodiscard]] enum_t as_enum() const noexcept;
 
     // Get method string representation (all caps)
-    [[nodiscard]] std::string str() const noexcept;
+    [[nodiscard]] std::string as_string() const noexcept;
 
 private:
     struct impl;
