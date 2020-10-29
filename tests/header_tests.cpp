@@ -33,6 +33,24 @@ TEST( Header, NotSupportedString )
     EXPECT_THROW(requests::header("a", "b"), std::invalid_argument);
 }
 
+TEST( Header, SetValue )
+{
+    requests::header h {requests::header::user_agent, ""};
+
+    EXPECT_EQ( h.name(),           requests::header::user_agent  );
+    EXPECT_EQ( h.name().as_enum(), requests::header::user_agent  );
+    EXPECT_EQ( h.name().as_string(),                "user-agent" );
+
+    EXPECT_EQ( h.value(), "" );
+
+    EXPECT_EQ( h.as_string(), "user-agent: ");
+
+
+    h.value("LibRequests");
+    EXPECT_EQ( h.value(), "LibRequests" );
+
+    EXPECT_EQ( h.as_string(), "user-agent: LibRequests");
+}
 
 int main(int argc, char *argv[])
 {

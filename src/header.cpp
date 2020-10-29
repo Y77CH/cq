@@ -11,7 +11,7 @@ constexpr std::array<std::string_view, 3> arr = {
 };
 
 
-requests::header::header(std::string_view name, std::string_view value) : m_value(value)
+requests::header::name_t::name_t(std::string_view name)
 {
     // Header name string
     std::string str {name};
@@ -25,7 +25,7 @@ requests::header::header(std::string_view name, std::string_view value) : m_valu
     // Check if one of supported names
     if (auto &&it = std::find(arr.begin(), arr.end(), str); it != arr.end())
     {
-        m_name_enum = static_cast<header::enum_t>(std::distance(arr.begin(), it));
+        m_e = static_cast<header::enum_t>(std::distance(arr.begin(), it));
     }
     else
     {

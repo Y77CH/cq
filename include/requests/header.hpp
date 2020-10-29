@@ -18,22 +18,16 @@ public:
         user_agent
     };
 
-
-    // Create header from its enum name and value
-    header(const header::enum_t &name, std::string_view value)
-    : m_name_enum(name), m_value(value) {}
-
-    // Create header from its string name and value
-    header(std::string_view name, std::string_view value);
-
-
     // Enum wrapper for header name
     class name_t
     {
     public:
 
         // Wrapp enum
-        explicit name_t(const header::enum_t &e) : m_e(e) {}
+        name_t(const header::enum_t &e) : m_e(e) {}
+
+        // Make enum entry from string and wrapp it
+        name_t(std::string_view);
 
 
         // Unwrapp enum using implicit cast
@@ -50,19 +44,40 @@ public:
         header::enum_t m_e;
     };
 
+
+    // Header field-value
+    using value_t = std::string;
+
+
+    // Create header from its enum name wrapper and value
+    header(const header::name_t &name, std::string_view value)
+    : m_name(name), m_value(value) {}
+
+    // Create header from its enum name and value
+    header(const header::enum_t &name, std::string_view value)
+    : m_name(name), m_value(value) {}
+
+    // Create header from its string name and value
+    header(std::string_view name, std::string_view value)
+    : m_name(name), m_value(value) {}
+
+
     // Get wrapped header name
-    [[nodiscard]] name_t name() const noexcept { return name_t(m_name_enum); }
+    [[nodiscard]] name_t name() const noexcept { return m_name; }
 
     // Get header value
-    [[nodiscard]] std::string value() const noexcept { return m_value; }
+    [[nodiscard]] value_t value() const noexcept { return m_value; }
+
+    // Set header value
+    void value(std::string_view v) noexcept { m_value = v; }
 
 
     // Get header string representation
-    [[nodiscard]] std::string as_string() const noexcept { return name().as_string() + ": " + m_value; }
+    [[nodiscard]] std::string as_string() const noexcept { return m_name.as_string() + ": " + m_value; }
 
 private:
-    header::enum_t m_name_enum;
-    std::string    m_value;
+    header::name_t  m_name;
+    header::value_t m_value;
 };
 
 } // namespace requests
