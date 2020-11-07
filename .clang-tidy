@@ -10,7 +10,9 @@ Checks: '*,
     -hicpp-signed-bitwise,
     -clang-diagnostic-c++17-extensions,
     -google-build-using-namespace,
-    -readability-redundant-string-init
+    -readability-redundant-string-init,
+    -fuchsia-overloaded-operator,
+    -fuchsia-default-arguments-declarations
 '
 HeaderFilterRegex: ''
 FormatStyle: file

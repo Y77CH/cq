@@ -1,18 +1,17 @@
 #ifndef REQUESTS_METHOD_HPP
 #define REQUESTS_METHOD_HPP
 
-#include <string>
-#include <string_view>
+#include "requests/enums.hpp"
 
 namespace requests {
 
-// Request method
-class method
-{
-public:
+namespace detail {
 
+// Inheritable enum class
+struct method_helper
+{
     // Possible methods
-    enum enum_t : uint8_t {
+    enum enum_t {
         DELETE,
         GET,
         HEAD,
@@ -21,29 +20,23 @@ public:
         POST,
         PUT
     };
-
-
-    // Construct method from enum
-    explicit method(const method::enum_t &e) : m_e(e) {}
-
-    /**
-     * @brief Create method from method string.
-     *
-     * @note: Throws exception if not found in enum
-     */
-    explicit method(std::string_view);
-
-
-    // Get method enum entry
-    [[nodiscard]] enum_t as_enum() const noexcept { return m_e; }
-
-    // Get method string representation (all caps)
-    [[nodiscard]] std::string as_string() const noexcept;
-
-private:
-    method::enum_t m_e;
 };
 
-} // namespace requests
+} // namespace detail
+
+// Specify range for compiler to do less work
+template<>
+struct enums::enum_range<detail::method_helper::enum_t>
+{
+    static constexpr auto min = 0;
+    static constexpr auto max = 6;
+};
+
+// Request method
+struct method : public detail::method_helper,
+                public enums::enum_wrapper<detail::method_helper::enum_t, enums::case_insensitive>
+{ using enums::enum_wrapper<detail::method_helper::enum_t, enums::case_insensitive>::enum_wrapper; };
+
+}; // namespace requests
 
 #endif // REQUESTS_METHOD_HPP

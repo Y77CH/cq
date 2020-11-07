@@ -2,44 +2,53 @@
 #define REQUESTS_URL_HPP
 
 #include <string>
-#include <string_view>
+
+#include "requests/enums.hpp"
 
 namespace requests {
 
 // Uniform Resource Locators [RFC1738]
-class url
+struct url
 {
-public:
-
-    // Possible url schemes
-    enum class scheme_t : uint8_t {
-        http,
-        https
+private:
+    // Inheritable enum class
+    struct scheme_helper {
+        // Possible schemes
+        enum enum_t {
+            http  = 80,
+            https = 443
+        };
     };
+
+public:
+    // Scheme enum wrapper
+    struct scheme_t : public scheme_helper,
+                      public enums::enum_wrapper<scheme_helper::enum_t, enums::case_insensitive>
+    { using enums::enum_wrapper<scheme_helper::enum_t, enums::case_insensitive>::enum_wrapper; };
 
 
     // Create URL from string
     explicit url(std::string_view url);
 
 
-    /* Get methods */
-    [[nodiscard]] scheme_t    scheme()   const noexcept { return m_scheme;   }
-    [[nodiscard]] std::string host()     const noexcept { return m_host;     }
-    [[nodiscard]] uint16_t    port()     const noexcept { return m_port;     }
-    [[nodiscard]] std::string path()     const noexcept { return m_path;     }
-    [[nodiscard]] std::string query()    const noexcept { return m_query;    }
-    [[nodiscard]] std::string fragment() const noexcept { return m_fragment; }
-
     // Return URL string
     [[nodiscard]] std::string as_string() const noexcept;
 
-private:
-    url::scheme_t m_scheme;
-    std::string   m_host;
-    uint16_t      m_port;
-    std::string   m_path;
-    std::string   m_query;
-    std::string   m_fragment;
+
+    url::scheme_t scheme;
+    std::string   host;
+    uint16_t      port;
+    std::string   path;
+    std::string   query;
+    std::string   fragment;
+};
+
+// Specify range because there are values not withing default range
+template<>
+struct enums::enum_range<url::scheme_t::enum_t>
+{
+    static constexpr auto min = 80;
+    static constexpr auto max = 443;
 };
 
 } // namespace requests

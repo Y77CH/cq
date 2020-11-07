@@ -7,7 +7,7 @@ TEST( Method, Enum )
     requests::method m {requests::method::GET};
 
     EXPECT_EQ( m.as_enum(), requests::method::GET);
-    EXPECT_EQ( m.as_string(), "GET");
+    EXPECT_EQ( m.as_view(), "GET");
 }
 
 TEST( Method, String )
@@ -15,7 +15,7 @@ TEST( Method, String )
     requests::method m {"post"};
 
     EXPECT_EQ( m.as_enum(), requests::method::POST);
-    EXPECT_EQ( m.as_string(),  "POST");
+    EXPECT_EQ( m.as_view(),  "POST");
 }
 
 TEST( Method, Caps )
@@ -23,7 +23,7 @@ TEST( Method, Caps )
     requests::method m {"DELETE"};
 
     EXPECT_EQ( m.as_enum(), requests::method::DELETE);
-    EXPECT_EQ( m.as_string(),  "DELETE");
+    EXPECT_EQ( m.as_view(),  "DELETE");
 }
 
 TEST( Method, NotSupportedString )

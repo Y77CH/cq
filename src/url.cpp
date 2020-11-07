@@ -70,7 +70,7 @@ requests::url::url(std::string_view url)
         scheme_str.begin(), [](auto &&c){ return std::tolower(c); }
     );
     // Get enum scheme
-    m_scheme = (scheme_str == "http" ? scheme_t::http : scheme_t::https);
+    scheme = scheme_t{scheme_str};
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -93,11 +93,11 @@ requests::url::url(std::string_view url)
         throw std::logic_error("Not a valid URL!");
     }
     // Get host
-    m_host = match.str();
+    host = match.str();
     // Convert host to lowercase
     std::transform(
-        m_host.begin(), m_host.end(),
-        m_host.begin(), [](auto &&c){ return std::tolower(c); }
+        host.begin(), host.end(),
+        host.begin(), [](auto &&c){ return std::tolower(c); }
     );
     // Remove found
     url.remove_prefix(match.str().size());
@@ -110,15 +110,13 @@ requests::url::url(std::string_view url)
     std::regex_search(url.data(), match, rport);
     if (match.str().empty())
     {
-        constexpr uint16_t http_default_port = 80;
-        constexpr uint16_t https_default_port = 443;
         // Change port to default if not specified
-        m_port = (m_scheme == scheme_t::http ? http_default_port : https_default_port);
+        port = static_cast<uint16_t>(scheme);
     }
     else
     {
         // Get specified port
-        m_port = std::stoul(match.str(2));
+        port = std::stoul(match.str(2));
     }
     // Remove found
     url.remove_prefix(match.str().size());
@@ -137,9 +135,9 @@ requests::url::url(std::string_view url)
     // Find path
     std::regex_search(url.data(), match, rpath);
     // Get specified path or ""
-    m_path = match.str();
+    path = match.str();
     // Change path if empty
-    if (m_path.empty()) { m_path = "/"; }
+    if (path.empty()) { path = "/"; }
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -150,7 +148,7 @@ requests::url::url(std::string_view url)
     // Find query
     std::regex_search(url.data(), match, rquery);
     // Get specified query or ""
-    m_query = match.str(1);
+    query = match.str(1);
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -165,7 +163,7 @@ requests::url::url(std::string_view url)
     // Find query
     std::regex_search(url.data(), match, rfragment);
     // Get specified query or ""
-    m_fragment = match.str(1);
+    fragment = match.str(1);
     // Remove found
     url.remove_prefix(match.str().size());
 }
@@ -174,22 +172,19 @@ std::string requests::url::as_string() const noexcept
 {
     std::string res;
 
-    switch (m_scheme)
-    {
-    case scheme_t::http:  res += "http"; break;
-    case scheme_t::https: res += "https"; break;
-    }
+    res += scheme.as_view();
+
     res += "://";
 
-    res += m_host;
+    res += host;
 
-    res += ":" + std::to_string(m_port);
+    res += ":" + std::to_string(port);
 
-    res += m_path;
+    res += path;
 
-    if (!m_query.empty())    { res += "?" + m_query; }
+    if (!query.empty())    { res += "?" + query; }
 
-    if (!m_fragment.empty()) { res += "#" + m_fragment; }
+    if (!fragment.empty()) { res += "#" + fragment; }
 
     return res;
 }
