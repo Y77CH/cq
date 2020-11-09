@@ -273,7 +273,7 @@ public:
     {}
 
     // Create and wrapp enum entry by its entry name
-    explicit constexpr enum_wrapper(
+    constexpr enum_wrapper(
         std::string_view n, const NameEqual &eq = NameEqual())
     {
         auto v = enum_value<E>(n, eq);
