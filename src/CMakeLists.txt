@@ -9,13 +9,12 @@ set(
         ${PROJECT_SOURCE_DIR}/include/requests/enums.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/method.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/url.hpp
-        ${PROJECT_SOURCE_DIR}/include/requests/header.hpp
+        ${PROJECT_SOURCE_DIR}/include/requests/headers.hpp
 )
 
 # path to sources
 set(
     requests_sources
-        header.cpp
         url.cpp
 )
 

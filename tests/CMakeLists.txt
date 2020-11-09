@@ -47,4 +47,4 @@ endmacro()
 
 add_requests_test(url)
 add_requests_test(method)
-add_requests_test(header)
+add_requests_test(headers)
