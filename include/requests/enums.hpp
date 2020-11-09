@@ -261,9 +261,6 @@ template<typename E, typename NameEqual = case_sensitive>
 class enum_wrapper
 {
 public:
-    using enum_type  = E;
-    using name_equal = NameEqual;
-
     // Default constructor
     constexpr enum_wrapper() noexcept = default;
 
