@@ -1,10 +1,10 @@
-#include "requests/url.hpp"
+#include "requests/options/url.hpp"
 
 #include <regex>
 #include <stdexcept>
 
 
-requests::url::url(std::string_view url)
+Requests::Url::Url(std::string_view url)
 {
     // BNF for http/https (from RFC1738):
     //
@@ -70,7 +70,7 @@ requests::url::url(std::string_view url)
         scheme_str.begin(), [](auto &&c){ return std::tolower(c); }
     );
     // Get enum scheme
-    scheme = scheme_t{scheme_str};
+    scheme = Scheme{scheme_str};
     // Remove found
     url.remove_prefix(match.str().size());
 
@@ -168,11 +168,12 @@ requests::url::url(std::string_view url)
     url.remove_prefix(match.str().size());
 }
 
-std::string requests::url::as_string() const noexcept
+
+std::string Requests::Url::to_string() const noexcept
 {
     std::string res;
 
-    res += scheme.as_view();
+    res += scheme.to_string();
 
     res += "://";
 

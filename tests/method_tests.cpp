@@ -1,34 +1,34 @@
 #include <gtest/gtest.h>
 
-#include "requests/method.hpp"
+#include "requests/options/method.hpp"
 
 TEST( Method, Enum )
 {
-    requests::method m {requests::method::GET};
+    Requests::Method m {Requests::Method::GET};
 
-    EXPECT_EQ( m.as_enum(), requests::method::GET);
-    EXPECT_EQ( m.as_view(), "GET");
+    EXPECT_EQ( m, Requests::Method::GET);
+    EXPECT_EQ( m.to_string(),      "GET");
 }
 
 TEST( Method, String )
 {
-    requests::method m {"post"};
+    Requests::Method m {"post"};
 
-    EXPECT_EQ( m.as_enum(), requests::method::POST);
-    EXPECT_EQ( m.as_view(),  "POST");
+    EXPECT_EQ( m, Requests::Method::POST);
+    EXPECT_EQ( m.to_string(),      "POST");
 }
 
 TEST( Method, Caps )
 {
-    requests::method m {"DELETE"};
+    Requests::Method m {"DELETE"};
 
-    EXPECT_EQ( m.as_enum(), requests::method::DELETE);
-    EXPECT_EQ( m.as_view(),  "DELETE");
+    EXPECT_EQ( m, Requests::Method::DELETE);
+    EXPECT_EQ( m.to_string(),      "DELETE");
 }
 
 TEST( Method, NotSupportedString )
 {
-    EXPECT_THROW(requests::method m {"trace"}, std::invalid_argument);
+    EXPECT_THROW(Requests::Method m {"trace"}, std::invalid_argument);
 }
 
 int main(int argc, char *argv[])
