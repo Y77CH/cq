@@ -30,7 +30,7 @@ TEST( Headers, All )
     Requests::Headers hs {
         {Requests::Header::authorization, "token"},
         {Requests::Header::host, "www.example.com"},
-        {Requests::Header::user_agent, "LibRequests"}
+        {Requests::Header::user_agent, "Requests"}
     };
 }
 

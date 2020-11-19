@@ -8,7 +8,7 @@ TEST( HTTP, Delete )
         "http://httpbin.org/delete",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -27,7 +27,7 @@ TEST( HTTP, Get )
         "http://httpbin.org/get",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -46,7 +46,7 @@ TEST( HTTP, Patch )
         "http://httpbin.org/patch",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -65,7 +65,7 @@ TEST( HTTP, Post )
         "http://httpbin.org/post",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -84,7 +84,7 @@ TEST( HTTP, Put )
         "http://httpbin.org/put",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -104,7 +104,7 @@ TEST( HTTPS, Delete )
         "https://httpbin.org/delete",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -123,7 +123,7 @@ TEST( HTTPS, Get )
         "https://httpbin.org/get",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -142,7 +142,7 @@ TEST( HTTPS, Patch )
         "https://httpbin.org/patch",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -161,7 +161,7 @@ TEST( HTTPS, Post )
         "https://httpbin.org/post",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 
@@ -180,7 +180,7 @@ TEST( HTTPS, Put )
         "https://httpbin.org/put",
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
-            { "User-Agent", "LibRequests" }
+            { "User-Agent", "Requests" }
         }
     );
 

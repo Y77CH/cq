@@ -38,8 +38,8 @@ macro(add_requests_test _TEST_NAME)
     target_link_libraries(
         ${_TEST_NAME}_tests
             PRIVATE
-            GTest::GTest
-            librequests::requests)
+            requests
+            GTest::GTest)
     add_test(NAME ${_TEST_NAME}_tests COMMAND ${_TEST_NAME}_tests)
     # Group under the "tests" project folder in IDEs such as Visual Studio.
     set_property(TARGET ${_TEST_NAME}_tests PROPERTY FOLDER "tests")

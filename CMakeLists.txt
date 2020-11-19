@@ -5,7 +5,7 @@ project(
     librequests
         VERSION 0.0.0
         DESCRIPTION "C++ Requests library"
-        HOMEPAGE_URL https://github.com/gavrilikhin-d/librequests
+        HOMEPAGE_URL https://github.com/gavrilikhin-d/requests
         LANGUAGES CXX
 )
 
@@ -16,7 +16,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_subdirectory(src)
 
 # tests
-option(REQUESTS_BUILD_TESTS "Build test for LibRequest" OFF)
+option(REQUESTS_BUILD_TESTS "Build test for Requests" OFF)
 
 if(REQUESTS_BUILD_TESTS)
     enable_testing()

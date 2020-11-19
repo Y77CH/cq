@@ -29,7 +29,6 @@ set(
 )
 
 add_library(requests ${requests_sources} ${requests_headers})
-add_library(librequests::requests ALIAS requests)
 
 # Specify directories which the compiler should look for headers
 target_include_directories(
@@ -48,51 +47,12 @@ source_group(
 # All users of this library will need at least C++20
 target_compile_features(requests PUBLIC cxx_std_20)
 
-# OpenSSL dependency
-option(USE_SYSTEM_OPENSSL "Use preinstalled OpenSSL" ON)
-
 # configure OpenSSL
-if(USE_SYSTEM_OPENSSL)
-    find_package(OpenSSL COMPONENTS Crypto SSL)
-    target_link_libraries(requests OpenSSL::SSL OpenSSL::Crypto)
-endif()
-if(NOT USE_SYSTEM_OPENSSL OR NOT OPENSSL_FOUND)
-    # get dependencies from net
-    include(FetchContent)
+find_package(OpenSSL COMPONENTS Crypto SSL)
+target_link_libraries(requests OpenSSL::SSL OpenSSL::Crypto)
 
-    message(STATUS "Not using system OpenSSL, using built-in OpenSSL project instead.")
-    FetchContent_Declare(
-        OpenSSL
-            GIT_REPOSITORY https://github.com/openssl/openssl
-            GIT_TAG        master
-            USES_TERMINAL_DOWNLOAD TRUE)
-    FetchContent_MakeAvailable(OpenSSL)
-endif()
-
-# Boost dependency
-option(USE_SYSTEM_BOOST "Use preinstalled Boost::beast" ON)
-
-set(Boost_USE_STATIC_LIBS ON)
-
-# configure Beast
-if(USE_SYSTEM_BOOST)
-    find_package(Boost 1.66)
-endif()
-if(NOT USE_SYSTEM_BOOST OR NOT Boost_FOUND)
-    # get dependencies from net
-    include(FetchContent)
-
-    set(BOOST_ENABLE_CMAKE ON)
-
-    message(STATUS "Not using system boost::beast, using built-in boost::beast project instead.")
-    FetchContent_Declare(
-        Boost
-            GIT_REPOSITORY https://github.com/boostorg/beast
-            GIT_TAG        master
-            USES_TERMINAL_DOWNLOAD TRUE)
-    FetchContent_MakeAvailable(Boost)
-endif()
-
+# configure Boost
+find_package(Boost 1.66)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(requests Boost::boost)
 
