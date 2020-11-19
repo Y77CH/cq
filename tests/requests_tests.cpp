@@ -18,7 +18,7 @@ TEST( HTTP, Delete )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTP, Get )
@@ -28,7 +28,9 @@ TEST( HTTP, Get )
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
             { "User-Agent", "Requests" }
-        }
+        },
+        Requests::Query{{"key", "value"}},
+        Requests::Fragment{"body"}
     );
 
     std::cout << res.reason << " [" << res.status_code << "]\n";
@@ -37,7 +39,7 @@ TEST( HTTP, Get )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTP, Patch )
@@ -56,7 +58,7 @@ TEST( HTTP, Patch )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTP, Post )
@@ -75,7 +77,7 @@ TEST( HTTP, Post )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTP, Put )
@@ -94,7 +96,7 @@ TEST( HTTP, Put )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 
@@ -114,7 +116,7 @@ TEST( HTTPS, Delete )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTPS, Get )
@@ -133,7 +135,7 @@ TEST( HTTPS, Get )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTPS, Patch )
@@ -152,7 +154,7 @@ TEST( HTTPS, Patch )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTPS, Post )
@@ -171,7 +173,7 @@ TEST( HTTPS, Post )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 TEST( HTTPS, Put )
@@ -190,7 +192,7 @@ TEST( HTTPS, Put )
         std::cout << h.to_string() << ": " << v << "\n";
     }
     std::cout << "\n";
-    std::cout << res.body << "\n";
+    std::cout << res.text << "\n";
 }
 
 int main(int argc, char *argv[])

@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "requests/options/body.hpp"
 #include "requests/options/headers.hpp"
 
 
@@ -11,10 +10,10 @@ namespace Requests {
 
 struct Response
 {
-    Body        body;
     Headers     headers;
     std::string reason;
     uint16_t    status_code = 0;
+    std::string text;
 };
 
 } // namespace Requests

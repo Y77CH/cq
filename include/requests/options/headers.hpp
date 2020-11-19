@@ -438,7 +438,10 @@ struct Header
 
 
 // Collection of HTTP headers
-using Headers = std::unordered_map<Header, std::string, std::hash<int>>;
+struct Headers : std::unordered_map<Header, std::string, std::hash<int>>
+{
+    using std::unordered_map<Header, std::string, std::hash<int>>::unordered_map;
+};
 
 } // namespace Requests
 

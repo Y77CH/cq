@@ -16,12 +16,21 @@ public:
     std::string target;
     uint16_t    version;
     Headers     headers;
-    Body        body;
+    std::string body;
 
 
     /* Helper setters */
-    void set(const Body    &b)  noexcept { body = b; }
     void set(const Headers &hs) noexcept { headers = hs; }
+    void set(const Query   &q)
+    {
+        target += "?";
+        for (const auto &[k, v] : q)
+        {
+            target += k + "=" + v + "&";
+        }
+        target.pop_back();
+    }
+    void set(const Fragment &f) { if (!f.empty()) { target += "#" + f; } }
 };
 
 } // namespace Requests

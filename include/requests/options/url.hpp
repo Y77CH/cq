@@ -6,6 +6,9 @@
 
 #include "requests/detail/enum.hpp"
 
+#include "requests/options/fragment.hpp"
+#include "requests/options/query.hpp"
+
 
 namespace Requests {
 

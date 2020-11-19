@@ -10,9 +10,10 @@ set(
         ${PROJECT_SOURCE_DIR}/include/requests/detail/enum.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/impl/api.ipp
         ${PROJECT_SOURCE_DIR}/include/requests/impl/session.ipp
-        ${PROJECT_SOURCE_DIR}/include/requests/options/body.hpp
+        ${PROJECT_SOURCE_DIR}/include/requests/options/fragment.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/headers.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/method.hpp
+        ${PROJECT_SOURCE_DIR}/include/requests/options/query.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/url.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/request.hpp

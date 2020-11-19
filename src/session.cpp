@@ -105,10 +105,10 @@ Requests::Response Requests::Session::send(const Request &r)
 
     /* Convert to our response */
     Response res {
-        .body = beast_res.body(),
         .headers = {},
         .reason = beast_res.reason().to_string(),
-        .status_code = static_cast<uint16_t>(beast_res.result_int())
+        .status_code = static_cast<uint16_t>(beast_res.result_int()),
+        .text = beast_res.body()
     };
     for (const auto &e : beast_res)
     {
