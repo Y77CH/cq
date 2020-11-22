@@ -31,6 +31,17 @@ public:
         target.pop_back();
     }
     void set(const Fragment &f) { if (!f.empty()) { target += "#" + f; } }
+    void set(const Text &t) { headers["content-type"] = "text/plain"; body = t; }
+    void set(const Json &j) { headers["content-type"] = "application/json"; body = j; }
+    void set(const Data &d)
+    {
+        headers["content-type"] = "application/x-www-form-urlencoded";
+        for (const auto &[k, v] : d)
+        {
+            body += k + "=" + v + "&";
+        }
+        body.pop_back();
+    }
 };
 
 } // namespace Requests

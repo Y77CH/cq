@@ -26,6 +26,7 @@ Requests::Response Requests::Session::send(const Request &r)
         11,
         r.body
     };
+    beast_req.prepare_payload();
 
     /* Set up headers */
     for (const auto &[h, v] : common_headers)

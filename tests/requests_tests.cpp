@@ -9,7 +9,8 @@ TEST( HTTP, Delete )
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
             { "User-Agent", "Requests" }
-        }
+        },
+        Requests::Text{"data in text/plain form"}
     );
 
     std::cout << res.reason << " [" << res.status_code << "]\n";
@@ -49,6 +50,10 @@ TEST( HTTP, Patch )
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
             { "User-Agent", "Requests" }
+        },
+        Requests::Data{
+            {"info", "data in application/x-www-form-urlencoded form"},
+            {"key", "value"}
         }
     );
 
@@ -68,7 +73,8 @@ TEST( HTTP, Post )
         Requests::Headers{
             { Requests::Header::accept, "application/json" },
             { "User-Agent", "Requests" }
-        }
+        },
+        Requests::Json{"{\"note\":\"Requests::Json is a string, not real json object\"}"}
     );
 
     std::cout << res.reason << " [" << res.status_code << "]\n";
