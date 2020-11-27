@@ -1,17 +1,17 @@
 #ifndef REQUESTS_OPTIONS_METHOD_HPP
 #define REQUESTS_OPTIONS_METHOD_HPP
 
-#include "requests/detail/enum.hpp"
+#include <string>
+#include <string_view>
 
 
 namespace Requests {
 
-namespace Detail {
-
-// Inheritable enum class
-struct Method_Helper
+// Request method
+class Method
 {
-    // Possible methods (values are from boost)
+public:
+    // Possible methods. Values from Beast.
     enum enum_t {
         DELETE  = 1,
         GET     = 2,
@@ -21,23 +21,34 @@ struct Method_Helper
         OPTIONS = 7,
         PATCH   = 29
     };
+
+
+    Method() = default;
+
+    // Construct method from string. Case-insensitive
+    Method(const char *str) : Method(std::string_view{str}) {}
+
+    // Construct method from string. Case-insensitive
+    Method(std::string_view);
+
+    constexpr Method(enum_t e) noexcept : m_e(e) {}
+
+
+    // Return Method string all caps
+    std::string to_string() const noexcept;
+
+
+
+    constexpr enum_t to_enum() const noexcept { return m_e; }
+
+
+    constexpr operator enum_t&() noexcept { return m_e; }
+
+    constexpr operator const enum_t&() const noexcept { return m_e; }
+
+private:
+    enum_t m_e;
 };
-
-template<>
-struct Enum_Range<Method_Helper::enum_t>
-{
-    static constexpr auto min = 1;
-    static constexpr auto max = 29;
-};
-
-} // namespace Detail
-
-
-// Request method
-struct Method
-    : public Detail::Method_Helper,
-      public Detail::Enum<Detail::Method_Helper::enum_t, Detail::Case_Insensitive>
-{ using Detail::Enum<Detail::Method_Helper::enum_t, Detail::Case_Insensitive>::Enum; };
 
 } // namespace Requests
 

@@ -3,6 +3,7 @@
 
 #include <string>
 
+
 namespace Requests {
 
 struct Text : std::string

@@ -22,59 +22,41 @@ namespace Requests {
 class Session
 {
 public:
-    Url::Scheme scheme;
-    std::string host;
-    uint16_t    port;
+    // Stores scheme, host and port
+    Url base_url;
 
     // Added to each request
     Headers common_headers;
 
 
-    // Send prepared request
-    Response send(const Request &r);
+    // Prepare and send a request
+    Response send(Request r);
 
 
     template<typename ...Args>
-    Response delet(std::string_view target, const Args & ...args);
-
-
-    template<typename ...Args>
-    Response get(std::string_view target, const Args & ...args);
-
+    Response delet(Url target_url, const Args & ...args);
 
     template<typename ...Args>
-    Response head(std::string_view target, const Args & ...args);
-
-
-    template<typename ...Args>
-    Response options(std::string_view target, const Args & ...args);
-
+    Response get(Url target_url, const Args & ...args);
 
     template<typename ...Args>
-    Response patch(std::string_view target, const Args & ...args);
-
-
-    template<typename ...Args>
-    Response post(std::string_view target, const Args & ...args);
-
+    Response head(Url target_url, const Args & ...args);
 
     template<typename ...Args>
-    Response put(std::string_view target, const Args & ...args);
+    Response options(Url target_url, const Args & ...args);
 
-private:
-    void prepare_request(Request &r) const noexcept
-    {
-        r.version = 11;
-        r.headers["host"] = this->host + ":" + std::to_string(this->port);
-        r.headers.insert(common_headers.begin(), common_headers.end());
-    }
+    template<typename ...Args>
+    Response patch(Url target_url, const Args & ...args);
 
-    template<typename T, typename ...Args>
-    void prepare_request(Request &r, const T &t, const Args & ...args) const noexcept;
+    template<typename ...Args>
+    Response post(Url target_url, const Args & ...args);
+
+    template<typename ...Args>
+    Response put(Url target_url, const Args & ...args);
 };
 
 } // namespace Requests
 
-#include "requests/impl/session.ipp"
+#include "requests/session.ipp"
 
 #endif // REQUESTS_SESSION_HPP

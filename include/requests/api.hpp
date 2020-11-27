@@ -92,6 +92,6 @@ Response put(const Url &url, const Args & ...args);
 
 } // namespace Requests
 
-#include "requests/impl/api.ipp"
+#include "requests/api.ipp"
 
 #endif // REQUESTS_API_HPP

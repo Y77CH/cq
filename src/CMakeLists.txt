@@ -7,9 +7,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(
     requests_headers
         ${PROJECT_SOURCE_DIR}/include/requests/api.hpp
-        ${PROJECT_SOURCE_DIR}/include/requests/detail/enum.hpp
-        ${PROJECT_SOURCE_DIR}/include/requests/impl/api.ipp
-        ${PROJECT_SOURCE_DIR}/include/requests/impl/session.ipp
+        ${PROJECT_SOURCE_DIR}/include/requests/api.ipp
+        ${PROJECT_SOURCE_DIR}/include/requests/options/auth.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/data.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/fragment.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/options/headers.hpp
@@ -23,13 +22,18 @@ set(
         ${PROJECT_SOURCE_DIR}/include/requests/requests.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/response.hpp
         ${PROJECT_SOURCE_DIR}/include/requests/session.hpp
+        ${PROJECT_SOURCE_DIR}/include/requests/session.ipp
 )
 
 # path to sources
 set(
     requests_sources
+        options/auth.cpp
+        options/headers.cpp
+        options/method.cpp
+        options/url.cpp
+        request.cpp
         session.cpp
-        url.cpp
 )
 
 add_library(requests ${requests_sources} ${requests_headers})

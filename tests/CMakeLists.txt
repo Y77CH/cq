@@ -45,7 +45,6 @@ macro(add_requests_test _TEST_NAME)
     set_property(TARGET ${_TEST_NAME}_tests PROPERTY FOLDER "tests")
 endmacro()
 
-add_requests_test(headers)
 add_requests_test(method)
 add_requests_test(requests)
 add_requests_test(url)

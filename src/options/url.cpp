@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 
-Requests::Url::Url(std::string_view url)
+Requests::Url::Url(std::string_view url) noexcept
 {
     // BNF for http/https (from RFC1738):
     //
@@ -53,26 +53,24 @@ Requests::Url::Url(std::string_view url)
     //  xchar       = unreserved | reserved | escape
     //  digits      = 1*digit
 
+    std::cmatch match;
+
     // Starts with http(s) followed by :// in any case
     std::regex rscheme("^(https?)://", std::regex_constants::icase);
 
     // Find scheme
-    std::cmatch match;
-    if (!std::regex_search(url.data(), match, rscheme))
+    if (std::regex_search(url.data(), match, rscheme))
     {
-        throw std::logic_error("Not a valid URL!");
+        // Get scheme without ://
+        scheme = match.str(1);
+        // Convert scheme to lowercase
+        std::transform(
+            scheme.begin(), scheme.end(),
+            scheme.begin(), [](auto &&c){ return std::tolower(c); }
+        );
+        // Remove found
+        url.remove_prefix(match.str().size());
     }
-    // Get scheme without ://
-    std::string scheme_str = match.str(1);
-    // Convert scheme to lowercase
-    std::transform(
-        scheme_str.begin(), scheme_str.end(),
-        scheme_str.begin(), [](auto &&c){ return std::tolower(c); }
-    );
-    // Get enum scheme
-    scheme = Scheme{scheme_str};
-    // Remove found
-    url.remove_prefix(match.str().size());
 
 
     /* Regex helpers */
@@ -88,19 +86,18 @@ Requests::Url::Url(std::string_view url)
     );
 
     // Find host
-    if (!std::regex_search(url.data(), match, rhost))
+    if (std::regex_search(url.data(), match, rhost))
     {
-        throw std::logic_error("Not a valid URL!");
+        // Get host
+        host = match.str();
+        // Convert host to lowercase
+        std::transform(
+            host.begin(), host.end(),
+            host.begin(), [](auto &&c){ return std::tolower(c); }
+        );
+        // Remove found
+        url.remove_prefix(match.str().size());
     }
-    // Get host
-    host = match.str();
-    // Convert host to lowercase
-    std::transform(
-        host.begin(), host.end(),
-        host.begin(), [](auto &&c){ return std::tolower(c); }
-    );
-    // Remove found
-    url.remove_prefix(match.str().size());
 
 
     // Starts with optional port
@@ -108,18 +105,13 @@ Requests::Url::Url(std::string_view url)
 
     // Find port
     std::regex_search(url.data(), match, rport);
-    if (match.str().empty())
-    {
-        // Change port to default if not specified
-        port = static_cast<uint16_t>(scheme);
-    }
-    else
+    if (!match.str().empty())
     {
         // Get specified port
-        port = std::stoul(match.str(2));
+        port = match.str(2);
+        // Remove found
+        url.remove_prefix(match.str().size());
     }
-    // Remove found
-    url.remove_prefix(match.str().size());
 
 
     /* Regex helpers */
@@ -173,17 +165,15 @@ std::string Requests::Url::to_string() const noexcept
 {
     std::string res;
 
-    res += scheme.to_string();
+    if (!scheme.empty()) { res += scheme + "://"; }
 
-    res += "://";
+    if (!host.empty()) { res += host; }
 
-    res += host;
+    if (!port.empty()) { res += ":" + port; }
 
-    res += ":" + std::to_string(port);
+    if (!path.empty()) { res += path; }
 
-    res += path;
-
-    if (!query.empty())    { res += "?" + query; }
+    if (!query.empty()) { res += "?" + query; }
 
     if (!fragment.empty()) { res += "#" + fragment; }
 

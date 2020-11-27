@@ -1,6 +1,7 @@
 #ifndef REQUESTS_OPTIONS_HPP
 #define REQUESTS_OPTIONS_HPP
 
+#include "requests/options/auth.hpp"
 #include "requests/options/data.hpp"
 #include "requests/options/fragment.hpp"
 #include "requests/options/headers.hpp"
