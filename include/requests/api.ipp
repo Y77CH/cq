@@ -16,7 +16,7 @@ Response delet(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.delet(url, args...);
 }
@@ -30,7 +30,7 @@ Response get(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.get(url, args...);
 }
@@ -44,7 +44,7 @@ Response head(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.head(url, args...);
 }
@@ -58,7 +58,7 @@ Response options(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.options(url, args...);
 }
@@ -72,7 +72,7 @@ Response patch(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.patch(url, args...);
 }
@@ -86,7 +86,7 @@ Response post(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.post(url, args...);
 }
@@ -100,7 +100,7 @@ Response put(const Url &url, const Args & ...args)
     base_url.host = url.host;
     base_url.port = url.port;
 
-    Session s {.base_url = base_url};
+    auto &&s = get_session(base_url);
 
     return s.put(url, args...);
 }

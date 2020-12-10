@@ -1,6 +1,7 @@
 #ifndef REQUESTS_SESSION_HPP
 #define REQUESTS_SESSION_HPP
 
+#include <memory>
 #include <string>
 #include <string_view>
 
@@ -29,6 +30,9 @@ public:
     Headers common_headers;
 
 
+    Session(const Url &base_url, const Headers &common_headers = {});
+
+
     // Prepare and send a request
     Response send(Request r);
 
@@ -53,7 +57,14 @@ public:
 
     template<typename ...Args>
     Response put(Url target_url, const Args & ...args);
+
+private:
+    struct Impl;
+    std::unique_ptr<Impl> pimpl;
 };
+
+// Get existing session or create new
+Session & get_session(const Url &base_url, const Headers &common_headers = {});
 
 } // namespace Requests
 

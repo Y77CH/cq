@@ -11,7 +11,6 @@ namespace Requests {
 
 struct Response
 {
-    std::string         encoding;
     Headers             headers;
     std::list<Response> history;
     std::string         reason;
@@ -19,10 +18,6 @@ struct Response
     uint16_t            status_code = 0;
     std::string         text;
     Url                 url;
-
-
-    [[deprecated("Not implemented!")]]
-    Json json() const noexcept { return Json{""}; }
 };
 
 } // namespace Requests
