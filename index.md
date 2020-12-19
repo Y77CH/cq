@@ -45,6 +45,8 @@ The following features will be added in next releases:
 * Cookies
 * Timeouts
 * Json
+* Automatic dependencies installation
+* CMake FetchContent and find_package support
 
 And more!
 
