@@ -45,7 +45,8 @@ The following features will be added in next releases:
 * Cookies
 * Timeouts
 * Json
-* ...
+
+And more!
 
 ## Dependencies
 
