@@ -6,6 +6,7 @@ title: C++ Requests
 C++ Requests is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
 
 Sending a `GET` request is nothing more than:
+{% raw %}
 ```c++
 #include <requests/requests.hpp>
 
@@ -20,6 +21,7 @@ int main()
   return 0;
 }
 ```
+{% endraw %}
 
 ## Features
 
