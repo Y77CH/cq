@@ -1,37 +1,63 @@
-## Welcome to GitHub Pages
+# Requests
+[![Documentation](https://img.shields.io/badge/docs-online-informational?label=Docs&style=flat&link=https://gavrilikhin-d.github.io/requests/)](https://gavrilikhin-d.github.io/requests/)
+[![Build](https://github.com/gavrilikhin-d/requests/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gavrilikhin-d/requests/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/gavrilikhin-d/requests?label=License)](https://github.com/gavrilikhin-d/requests/blob/master/LICENSE)
 
-You can use the [editor on GitHub](https://github.com/gavrilikhin-d/requests/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+C++ Requests is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Sending a `GET` request is nothing more than:
+```c++
+#include <requests/requests.hpp>
 
-### Markdown
+int main()
+{
+  Requests::Response r = Requests::get("https://api.github.com/user", Requests::Auth{"user", "pass"});
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+  r.status_code;             // 200
+  r.headers["content-type"]; // "application/json; charset=utf8"
+  r.text;                    // "{\"type\":\"User\"..."
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+  return 0;
+}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+## Documentation
 
-### Jekyll Themes
+Documentation can be found [here](https://gavrilikhin-d.github.io/requests/). It's work in progress.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/gavrilikhin-d/requests/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Dependencies
 
-### Support or Contact
+Requests deliberately uses most modern `C++20` features, hence it requires lastest versions of compilers.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+It also requires:
+- `Boost`
+- `OpenSSL`
+
+## Install
+
+0. Install dependencies
+```
+sudo apt-get install libboost-dev openssl
+```
+
+1. Download sources
+```
+git clone https://github.com/gavrilikhin-d/requests
+```
+
+2. Build project
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+3. Install
+```
+cmake --install .
+```
+
+## Contributing
+Please fork this repository and contribute back using [pull requests](https://github.com/gavrilikhin-d/requests/pulls). Features can be requested using [issues](https://github.com/gavrilikhin-d/requests/issues). All code, comments, and critiques are greatly appreciated.
+
