@@ -1,14 +1,14 @@
 ---
 layout: default
-title: C++ Requests
+title: cq == C++ Requests
 ---
 
-C++ Requests is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
+**cq == C++ Requests** is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
 
 Sending a `GET` request is nothing more than:
 {% raw %}
 ```c++
-#include <requests/requests.hpp>
+#include <cq/requests.hpp>
 
 int main()
 {
@@ -67,7 +67,7 @@ sudo apt-get install libboost-dev openssl
 
 1. Download sources
 ```
-git clone https://github.com/gavrilikhin-d/requests
+git clone https://github.com/Y77CH/cq
 ```
 
 2. Build project
@@ -84,5 +84,5 @@ cmake --install .
 ```
 
 ## Contributing
-Please fork this repository and contribute back using [pull requests](https://github.com/gavrilikhin-d/requests/pulls). Features can be requested using [issues](https://github.com/gavrilikhin-d/requests/issues). All code, comments, and critiques are greatly appreciated.
+Please fork this repository and contribute back using [pull requests](https://github.com/Y77CH/cq/pulls). Features can be requested using [issues](https://github.com/Y77CH/cq/issues). All code, comments, and critiques are greatly appreciated.
 

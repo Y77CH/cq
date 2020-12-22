@@ -21,7 +21,7 @@ Begin by importing the Requests module (while C++20 modules not fully supported 
 
 {% raw %}
 ```c++
-#include <requests/requests.hpp>
+#include <cq/requests.hpp>
 ```
 {% endraw %}
 
