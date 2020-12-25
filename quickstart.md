@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Quick Start
+title: Quickstart
 ---
 
 C++ Requests is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
