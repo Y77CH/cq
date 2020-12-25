@@ -3,85 +3,46 @@ layout: default
 title: Quickstart
 ---
 
-C++ Requests is a [Python Requests](https://github.com/psf/requests) like library for sending HTTP requests. The library is inspired a lot by the [Cpr](https://github.com/whoshuu/cpr) project, yet uses Boost instead of cURL. We aim for most simple workflow with both HTTP and HTTPS protocols.
+# Quickstart
 
-Sending a `GET` request is nothing more than:
+This page gives a good introduction in how to get started with Requests.
+
+First, make sure that:
+* Requests is installed
+* Requests is up-to-date
+
+Let’s get started with some simple examples.
+
+## Make a Request
+
+Making a request with Requests is as simple as in python.
+
+Begin by importing the Requests module (while C++20 modules not fully supported including header instead):
+
 {% raw %}
 ```c++
 #include <requests/requests.hpp>
-
-int main()
-{
-  Requests::Response r = Requests::get("https://api.github.com/user", Requests::Auth{"user", "pass"});
-
-  r.status_code;             // 200
-  r.headers["content-type"]; // "application/json; charset=utf8"
-  r.text;                    // "{\"type\":\"User\"..."
-
-  return 0;
-}
 ```
 {% endraw %}
 
-## Features
+Now, let’s try to get a webpage. For this example, let’s get GitHub’s public timeline:
 
-C++ Requests currently supports:
-
-* GET request
-* POST request 
-* PUT request 
-* DELETE request 
-* PATCH request 
-* HEAD request 
-* OPTIONS request
-* HTTPS requests with OpenSSL
-* Basic authentication
-
-## Planned
-
-The following features will be added in next releases:
-
-* Asynchronous requests
-* Cookies
-* Timeouts
-* Json
-* Automatic dependencies installation
-* CMake FetchContent and find_package support
-
-And more!
-
-## Dependencies
-
-Requests deliberately uses most modern `C++20` features, hence it requires lastest versions of compilers.
-
-It also requires:
-- `Boost`
-- `OpenSSL`
-
-## Install
-
-0. Install dependencies
+{% raw %}
+```c++
+auto r = Requests::get("https://api.github.com/events");
 ```
-sudo apt-get install libboost-dev openssl
-```
+{% endraw %}
 
-1. Download sources
-```
-git clone https://github.com/gavrilikhin-d/requests
-```
+Now, we have a Requests::Response object called r. We can get all the information we need from this object.
 
-2. Build project
-```
-mkdir build
-cd build
-cmake ..
-cmake --build .
-```
+### Request options
 
-3. Install
-```
-cmake --install .
-```
-
-## Contributing
-Please fork this repository and contribute back using [pull requests](https://github.com/gavrilikhin-d/requests/pulls). Features can be requested using [issues](https://github.com/gavrilikhin-d/requests/issues). All code, comments, and critiques are greatly appreciated.
+* Requests::Auth
+* Requests::Data
+* Requests::Fragment
+* Requests::Header
+* Requests::Headers
+* Requests::Json
+* Requests::Query
+* Requests::Text
+* Requests::Url
