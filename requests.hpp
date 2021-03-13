@@ -8,6 +8,9 @@
 
 #include <curl/curl.h>
 
+#ifdef REQUESTS_WITH_NLOHMANN_JSON
+    #include "nlohmann.hpp"
+#endif // REQUESTS_WITH_NLOHMANN_JSON
 
 namespace requests {
 
@@ -27,6 +30,7 @@ struct url
 
     /* Create URL from string */
     url(const char *str) noexcept : url(std::string_view{str}) {}
+    url(const std::string &str) noexcept : url(std::string_view{str}) {}
     url(std::string_view url = "") noexcept
     {
         std::cmatch match;
@@ -176,6 +180,24 @@ std::string urlencoded(const std::map<std::string, std::string> &kv)
     return res;
 }
 
+std::map<std::string, std::string> urldecoded(std::string_view str)
+{
+    std::map<std::string, std::string> res;
+
+    std::string k, v;
+    bool processing_k = true;
+    for (const auto &c : str)
+    {
+        if (c == '=') { processing_k = false; continue; }
+        if (c == '&') { res[k] = v; k = v = ""; processing_k = true; continue; }
+        if (processing_k) { k.push_back(c); }
+        else { v.push_back(c); }
+    }
+    if (!k.empty()) { res[k] = v; }
+
+    return res;
+}
+
 // Basic authorization
 struct auth
 {
@@ -239,6 +261,12 @@ struct auth
     }
 };
 
+// Bearer token authorization
+struct bearer
+{
+    std::string token;
+};
+
 // Single HTTP-header
 struct header
 {
@@ -297,11 +325,16 @@ struct data : std::map<std::string, std::string>
     using std::map<std::string, std::string>::map;
 };
 
+#ifdef REQUESTS_WITH_NLOHMANN_JSON
+// JSON data
+using json = nlohmann::json;
+#else
 // JSON data
 struct json : std::string
 {
     using std::string::string;
 };
+#endif // REQUESTS_WITH_NLOHMANN_JSON
 
 // Plain text
 struct text : std::string
@@ -353,13 +386,22 @@ struct request
     void set(const query    &q) noexcept { target.query = urlencoded(q); }
     void set(const fragment &f) noexcept { target.fragment = f; }
     void set(const auth     &a) noexcept { headers["authorization"] = "Basic " + a.to_base64(); }
+    void set(const bearer   &b) noexcept { headers["authorization"] = "Bearer " + b.token; }
     void set(const header   &h) noexcept { headers[h.name] = h.value; }
-    void set(const json &j) noexcept { body = j; headers["content-type"] = "application/json"; }
     void set(const text &t) noexcept { body = t; headers["content-type"] = "text/plain"; }
     void set(const data &d) noexcept
     {
         body = urlencoded(d);
         headers["content-type"] = "application/x-www-form-urlencoded";
+    }
+    void set(const json &j) noexcept
+    {
+    #ifdef REQUESTS_WITH_NLOHMANN_JSON
+        body = nlohmann::to_string(j);
+    #else
+        body = j;
+    #endif // REQUESTS_WITH_NLOHMANN_JSON
+        headers["content-type"] = "application/json";
     }
 };
 
@@ -369,6 +411,10 @@ struct response
     std::string       reason;
     requests::headers headers;
     std::string       text;
+
+#ifdef REQUESTS_WITH_NLOHMANN_JSON
+    requests::json json() const { return nlohmann::json::parse(text); }
+#endif // REQUESTS_WITH_NLOHMANN_JSON
 };
 
 
@@ -459,7 +505,10 @@ struct session
         case method::DELETE:  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");  break;
         case method::GET:     curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);              break;
         case method::HEAD:    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "HEAD");    break;
-        case method::POST:    curl_easy_setopt(curl, CURLOPT_POST, 1L);                 break;
+        case method::POST:
+            curl_easy_setopt(curl, CURLOPT_POST, 1L);
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, r.body.c_str());
+            break;
         case method::PUT:     curl_easy_setopt(curl, CURLOPT_PUT, 1L);                  break;
         case method::OPTIONS: curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "OPTIONS"); break;
         case method::PATCH:   curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");   break;
@@ -474,6 +523,7 @@ struct session
             curl_headers = curl_slist_append(curl_headers, (h + ": " + v).c_str());
         }
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_headers);
+
 
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, &res);
 
